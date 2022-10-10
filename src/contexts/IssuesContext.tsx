@@ -14,6 +14,13 @@ interface Profile {
 
 interface Issue {
   url: string
+  id: number
+  title: string
+  body: string
+  user: {
+    login: string
+  }
+  comments: number
 }
 
 interface IssueContextType {
@@ -38,7 +45,7 @@ export function IssueProvider({ children }: IssuesProviderProps) {
   }, [])
 
   useEffect(() => {
-    api.get('Behenck/desafio03-github-blog/issues').then((response) => {
+    api.get('repos/Behenck/desafio03-github-blog/issues').then((response) => {
       setIssues(response.data)
     })
   }, [])

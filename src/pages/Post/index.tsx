@@ -1,7 +1,11 @@
+import { useContext } from 'react'
 import { AiFillGithub, AiOutlineLeft } from 'react-icons/ai'
 import { BiLinkExternal } from 'react-icons/bi'
 import { BsFillCalendarEventFill } from 'react-icons/bs'
 import { FaComment } from 'react-icons/fa'
+import { useParams } from 'react-router-dom'
+import { IssueContext } from '../../contexts/IssuesContext'
+import ReactMarkdown from 'react-markdown'
 import {
   Code,
   Info,
@@ -12,6 +16,13 @@ import {
 } from './styles'
 
 export function Post() {
+  const { issues } = useContext(IssueContext)
+
+  const { slug } = useParams()
+  const issue = issues.find((issue) => {
+    return issue.id === Number(slug)
+  })
+
   return (
     <PostContainer>
       <PostInfo>
@@ -30,42 +41,27 @@ export function Post() {
           </div>
         </header>
 
-        <h1>JavaScript data types and data structures</h1>
+        <h1>{issue?.title}</h1>
 
         <Info>
           <div>
             <AiFillGithub size={18} />
-            Behenck
+            {issue?.user.login}
           </div>
           <div>
             <BsFillCalendarEventFill size={18} />
             Há 1 dia
           </div>
           <div>
-            <FaComment size={18} />5 comentários
+            <FaComment size={18} />
+            {issue?.comments} comentários
           </div>
         </Info>
       </PostInfo>
 
       <PostContent>
         <Text>
-          <p>
-            <strong>
-              Programming languages all have built-in data structures, but these
-              often differ from one language to another.
-            </strong>{' '}
-            This article attempts to list the built-in data structures available
-            in JavaScript and what properties they have. These can be used to
-            build other data structures. Wherever possible, comparisons with
-            other languages are drawn.
-          </p>
-          <a href="">Dynamic typing</a>
-          <p>
-            JavaScript is a loosely typed and dynamic language. Variables in
-            JavaScript are not directly associated with any particular value
-            type, and any variable can be assigned (and re-assigned) values of
-            all types:
-          </p>
+          <ReactMarkdown>{issue?.body}</ReactMarkdown>
         </Text>
 
         <Code>

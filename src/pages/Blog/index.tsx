@@ -1,88 +1,38 @@
+import { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { IssueContext } from '../../contexts/IssuesContext'
 import { Profile } from './components/Profile'
 import { SearchPost } from './components/SearchPosts'
-import { Post, BlogContent } from './styles'
+import { Issue, Issues } from './styles'
 
 export function Blog() {
+  const { issues } = useContext(IssueContext)
+
   return (
     <>
       <Profile />
 
       <SearchPost />
 
-      <BlogContent>
-        <Post>
-          <header>
-            <h3>JavaScript data types and data structures</h3>
-            <span>Há 1 dia</span>
-          </header>
+      <Issues>
+        {issues.map((issue) => {
+          return (
+            <Link to={`post/${issue.id}`} target="_blank" key={issue.id}>
+              <Issue>
+                <header>
+                  <h3>{issue.title}</h3>
+                  <span>Há 1 dia</span>
+                </header>
 
-          <p>
-            Programming languages all have built-in data structures, but these
-            often differ from one language to another. This article attempts to
-            list the built-in data structures available in{' '}
-          </p>
-        </Post>
-        <Post>
-          <header>
-            <h3>JavaScript data types and data structures</h3>
-            <span>Há 1 dia</span>
-          </header>
-
-          <p>
-            Programming languages all have built-in data structures, but these
-            often differ from one language to another. This article attempts to
-            list the built-in data structures available in{' '}
-          </p>
-        </Post>
-        <Post>
-          <header>
-            <h3>JavaScript data types and data structures</h3>
-            <span>Há 1 dia</span>
-          </header>
-
-          <p>
-            Programming languages all have built-in data structures, but these
-            often differ from one language to another. This article attempts to
-            list the built-in data structures available in{' '}
-          </p>
-        </Post>
-        <Post>
-          <header>
-            <h3>JavaScript data types and data structures</h3>
-            <span>Há 1 dia</span>
-          </header>
-
-          <p>
-            Programming languages all have built-in data structures, but these
-            often differ from one language to another. This article attempts to
-            list the built-in data structures available in{' '}
-          </p>
-        </Post>
-        <Post>
-          <header>
-            <h3>JavaScript data types and data structures</h3>
-            <span>Há 1 dia</span>
-          </header>
-
-          <p>
-            Programming languages all have built-in data structures, but these
-            often differ from one language to another. This article attempts to
-            list the built-in data structures available in{' '}
-          </p>
-        </Post>
-        <Post>
-          <header>
-            <h3>JavaScript data types and data structures</h3>
-            <span>Há 1 dia</span>
-          </header>
-
-          <p>
-            Programming languages all have built-in data structures, but these
-            often differ from one language to another. This article attempts to
-            list the built-in data structures available in{' '}
-          </p>
-        </Post>
-      </BlogContent>
+                <p>
+                  {issue.body.slice(0, 150)}
+                  {'...'}
+                </p>
+              </Issue>
+            </Link>
+          )
+        })}
+      </Issues>
     </>
   )
 }

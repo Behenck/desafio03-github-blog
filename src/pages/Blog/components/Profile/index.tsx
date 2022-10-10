@@ -6,8 +6,7 @@ import { useContext } from 'react'
 import { IssueContext } from '../../../../contexts/IssuesContext'
 
 export function Profile() {
-  const { profile, issues } = useContext(IssueContext)
-  console.log(issues)
+  const { profile } = useContext(IssueContext)
 
   return (
     <ProfileContainer>
