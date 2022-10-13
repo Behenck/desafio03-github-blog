@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useEffect, useState } from 'react'
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
 import { api } from '../lib/api'
 
 interface Profile {
@@ -26,6 +32,7 @@ interface Issue {
 interface IssueContextType {
   profile: Profile
   issues: Issue[]
+  fetchIssues: (query: string) => Promise<void>
 }
 
 interface IssuesProviderProps {
@@ -36,7 +43,7 @@ export const IssueContext = createContext({} as IssueContextType)
 
 export function IssueProvider({ children }: IssuesProviderProps) {
   const [profile, setProfile] = useState<Profile>({} as Profile)
-  const [issues, setIssues] = useState([])
+  const [issues, setIssues] = useState<Issue[]>([])
 
   useEffect(() => {
     api.get<Profile>('/users/Behenck').then((response) => {
@@ -44,14 +51,21 @@ export function IssueProvider({ children }: IssuesProviderProps) {
     })
   }, [])
 
-  useEffect(() => {
-    api.get('repos/Behenck/desafio03-github-blog/issues').then((response) => {
-      setIssues(response.data)
+  const fetchIssues = useCallback(async (query?: string) => {
+    const response = await api.get('/search/issues', {
+      params: {
+        q: `${query} repo:Behenck/desafio03-github-blog`,
+      },
     })
+    setIssues(response.data.items)
   }, [])
 
+  useEffect(() => {
+    fetchIssues()
+  }, [fetchIssues])
+
   return (
-    <IssueContext.Provider value={{ profile, issues }}>
+    <IssueContext.Provider value={{ profile, issues, fetchIssues }}>
       {children}
     </IssueContext.Provider>
   )

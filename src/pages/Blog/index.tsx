@@ -7,7 +7,6 @@ import { Issue, Issues } from './styles'
 
 export function Blog() {
   const { issues } = useContext(IssueContext)
-
   return (
     <>
       <Profile />

@@ -26,6 +26,7 @@ export const SearchPostContainer = styled.div`
   }
 
   input[type='text'] {
+    width: 100%;
     border: 6px;
     line-height: 1.6;
     color: ${(props) => props.theme['gray-500']};

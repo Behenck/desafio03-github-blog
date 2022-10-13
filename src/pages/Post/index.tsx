@@ -63,12 +63,6 @@ export function Post() {
         <Text>
           <ReactMarkdown>{issue?.body}</ReactMarkdown>
         </Text>
-
-        <Code>
-          <p>let foo = 42; // foo is now a number</p>
-          <p>foo = ‘bar’; // foo is now a string</p>
-          <p>foo = true; // foo is now a boolean</p>
-        </Code>
       </PostContent>
     </PostContainer>
   )
