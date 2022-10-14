@@ -12,7 +12,7 @@ const searchFormSchema = z.object({
 type SearchFormInputs = z.infer<typeof searchFormSchema>
 
 export function SearchPost() {
-  const { fetchIssues } = useContext(IssueContext)
+  const { fetchIssues, totalPublications } = useContext(IssueContext)
 
   const { register, handleSubmit, reset } = useForm<SearchFormInputs>({
     resolver: zodResolver(searchFormSchema),
@@ -27,7 +27,7 @@ export function SearchPost() {
     <SearchPostContainer>
       <div>
         <label htmlFor="">Publicações</label>
-        <span>6 publicações</span>
+        <span>{totalPublications} publicações</span>
       </div>
 
       <form onSubmit={handleSubmit(handleSearchIssues)}>

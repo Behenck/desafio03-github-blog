@@ -27,12 +27,14 @@ interface Issue {
     login: string
   }
   comments: number
+  created_at: string
 }
 
 interface IssueContextType {
   profile: Profile
   issues: Issue[]
   fetchIssues: (query: string) => Promise<void>
+  totalPublications: number
 }
 
 interface IssuesProviderProps {
@@ -44,28 +46,43 @@ export const IssueContext = createContext({} as IssueContextType)
 export function IssueProvider({ children }: IssuesProviderProps) {
   const [profile, setProfile] = useState<Profile>({} as Profile)
   const [issues, setIssues] = useState<Issue[]>([])
+  const [totalPublications, setTotalPublications] = useState(0)
 
-  useEffect(() => {
-    api.get<Profile>('/users/Behenck').then((response) => {
+  const username = import.meta.env.VITE_GITHUB_USERNAME
+  const repository = import.meta.env.VITE_GITHUB_REPOSITORY
+
+  const fetchProfile = useCallback(async () => {
+    api.get<Profile>(`/users/${username}`).then((response) => {
       setProfile(response.data)
     })
-  }, [])
+  }, [username])
 
-  const fetchIssues = useCallback(async (query?: string) => {
-    const response = await api.get('/search/issues', {
-      params: {
-        q: `${query} repo:Behenck/desafio03-github-blog`,
-      },
-    })
-    setIssues(response.data.items)
-  }, [])
+  const fetchIssues = useCallback(
+    async (query: string = '') => {
+      try {
+        const response = await api.get('/search/issues', {
+          params: {
+            q: `${query}repo:${username}/${repository}`,
+          },
+        })
+        setIssues(response.data.items)
+        setTotalPublications(response.data.items.length)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    [repository, username],
+  )
 
   useEffect(() => {
     fetchIssues()
-  }, [fetchIssues])
+    fetchProfile()
+  }, [fetchIssues, fetchProfile])
 
   return (
-    <IssueContext.Provider value={{ profile, issues, fetchIssues }}>
+    <IssueContext.Provider
+      value={{ profile, issues, fetchIssues, totalPublications }}
+    >
       {children}
     </IssueContext.Provider>
   )
